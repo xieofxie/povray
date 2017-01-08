@@ -5,9 +5,6 @@ branches:
   except:
   - coverity_scan
 
-# Only build tags on this branch.
-skip_non_tags: true
-
 image: Visual Studio 2015
 
 shallow_clone: true
@@ -103,5 +100,3 @@ deploy:
     secure: WkcFPXyr/SJ9TXixTQyivhfoR9FzlryIbc4deHeQ0eA6YRXL0wQopMYJ6XL1/FJK
   draft: true
   prerelease: true
-  on:
-    appveyor_repo_tag: true
