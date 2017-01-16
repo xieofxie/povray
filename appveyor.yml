@@ -13,6 +13,8 @@ matrix:
   fast_finish: true
 
 environment:
+  PovBuildDefs:
+    secure: dQ/GBBYlkqKDmBEgJfgajfBn58ziSh1JPXsiWtnBL1dE3/s4QZJutGdDtLxiG3eNq0DXMVhDIbGqyPSma9Q9xazlpRZkuU7Gl8rXCw7c03A/oliLoR6q/0Jb+Q9LNH5R/oYiDCHhNP8Cx6OXys4d5A==
   matrix:
   - configuration: Release
     platform: x64
