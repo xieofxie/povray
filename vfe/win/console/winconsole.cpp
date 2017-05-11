@@ -90,7 +90,7 @@ int main (int argc, char **argv)
   vfeWinSession     *session = new vfeWinSession() ;
   vfeStatusFlags    flags;
   vfeRenderOptions  opts;
-
+#if false
   fprintf(stderr,
           "This is an example of a minimal console build of POV-Ray under Windows.\n\n"
           "Persistence of Vision Raytracer(tm) " POV_RAY_VERSION COMPILER_VER SSE2_INCLUDED "." PVENGINE_VER ".\n"
@@ -100,7 +100,7 @@ int main (int argc, char **argv)
 		  POV_RAY_COPYRIGHT "\n"
 		  DISCLAIMER_MESSAGE_1 "\n"
 		  DISCLAIMER_MESSAGE_2 "\n\n");
-  
+#endif
   if (session->Initialize(NULL, NULL) != vfeNoError)
     ErrorExit(session);
 

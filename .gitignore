@@ -185,3 +185,8 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
+libraries/ilmbase/Half/eLut.h
+libraries/ilmbase/Half/toFloat.h
+windows/vs10/bin32/
+windows/vs10/*.db
+windows/vs10/*.opendb
