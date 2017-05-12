@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<cameras>
+  <camera name='left'>
+    <pos>0.1,0,0</pos>
+    <quat>1,0,0,0</quat>
+  </camera>
+  <camera name='right'>
+    <pos>-0.1,0,0</pos>
+    <quat>1,0,0,0</quat>
+  </camera>
+</cameras>

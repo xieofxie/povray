@@ -185,8 +185,24 @@ $RECYCLE.BIN/
 # Mac crap
 .DS_Store
 
-libraries/ilmbase/Half/eLut.h
-libraries/ilmbase/Half/toFloat.h
-windows/vs10/bin32/
-windows/vs10/*.db
-windows/vs10/*.opendb
+# after build in windows
+/libraries/ilmbase/Half/eLut.h
+/libraries/ilmbase/Half/toFloat.h
+/windows/vs10/bin32/
+/windows/vs10/*.db
+/windows/vs10/*.opendb
+# after prebuild in unix
+
+# after build in unix
+*.Po
+.dirstamp
+/vfe/Makefile
+/unix/Makefile
+/unix/povray
+/source/Makefile
+/source/jversion.h
+/stamp-h1
+/povray.ini
+/config.status
+/config.h
+/Makefile
