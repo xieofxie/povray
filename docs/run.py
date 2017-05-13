@@ -1,6 +1,8 @@
 import os, argparse, platform, math, time
 from pyrr import Quaternion, Matrix44, Vector3
-import camera, path, config
+from Camera import Camera
+from Path import Path
+from Config import Config
 
 parser = argparse.ArgumentParser(description='run many povray calls')
 parser.add_argument('file',type=argparse.FileType('r'),help='pov file')
@@ -17,17 +19,18 @@ parser.add_argument('-a',type=float,default=90,help='horizontal viewing angle, d
 parser.add_argument('-oh',type=int,default=32,help='output height, default 64')
 parser.add_argument('-ow',type=int,default=32,help='output width, default 64')
 parser.add_argument('-q',type=int,default=9,help='quality, default 9(0~11)')
+parser.add_argument('-s',type=int,default=0,help='skip samples, default 0')
 args = parser.parse_args()
 
-config.ResolveArgs(args)
-print(args)
+config = Config(args)
+#print(args)
+camera = Camera(args.camera)
+path = Path(args.path)
 
-cam = camera.Camera(args.camera)
-pa = path.Path(args.path)
-
-for i in range(0,pa.total):
-  pathPose = pa.GetPose(i)
-  for j in range(0,cam.total):
-    name = cam.GetName(j)
-    camPose = cam.GetPose(j,pathPose)
-    config.Output(args,camPose,i,name)
+for i in range(0,path.total):
+  pathPose = path.GetPose(i)
+  config.PrepareID(i,pathPose)
+  for j in range(0,camera.total):
+    name = camera.GetName(j)
+    camPose = camera.GetPose(j,pathPose)
+    config.Output(camPose,name)

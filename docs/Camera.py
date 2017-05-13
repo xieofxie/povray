@@ -1,7 +1,7 @@
 from xml.dom import minidom
 import numpy as np
 from pyquaternion import Quaternion
-from config import GetTranslationArray
+from Math import GetTranslationArray
 
 class Camera:
   def __init__(self, file):
@@ -25,7 +25,7 @@ class Camera:
       q = Quaternion(self.Convert(quat))
       self.quats.append(q)
       self.quatMatrices.append(q.transformation_matrix)
-      print(name,pos,quat)
+      #print(name,pos,quat)
 
   def GetPose(self, id, pose):
     #mFinal = self.quatMatrices[id] * self.posMatrices[id] * pose[3] * pose[2]

@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from pyquaternion import Quaternion
-from config import GetTranslationArray
+from Math import GetTranslationArray
 
 class Path:
   def __init__(self, file):
