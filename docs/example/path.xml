@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<paths>
+	<path type='linear'>
+		<pos>-1.5,1.5,1.5</pos>
+		<quat>1,0,0,0</quat>
+		<step>2</step>
+		<pos>-1.5,1.5,1.5</pos>
+		<quat>0.92387953251128674, 0.0, 0.38268343236508978, 0.0</quat>
+	</path>
+</paths>

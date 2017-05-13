@@ -54,7 +54,7 @@ class Config:
       right = ' Declare=val_right0=%f' % args.wh
       angle = ' Declare=val_angle=%f' % args.a
       val = location + look_at + sky + right + angle
-      # TODO any format one line
+      # TODO any format one like
       output = os.path.join(args.output,'%d-%s.png' % (self.currentID,name))
       a = (args.e,args.file,output,args.ow,args.oh,args.i,args.q,val)
       cmd = '%s +I%s +O%s +W%d +H%d +FN16 +wt1 -d %s Declare=use_baking=2 +A0.0 Quality=%d %s' % a

@@ -1,7 +1,7 @@
-from xml.dom import minidom
+import xml.etree.ElementTree as ET
 import numpy as np
 from pyquaternion import Quaternion
-from Math import GetTranslationArray
+from Math import GetTranslationArray, GetPos, GetQuat
 
 class Camera:
   def __init__(self, file):
@@ -11,36 +11,25 @@ class Camera:
     self.posMatrices = []
     self.quats = []
     self.quatMatrices = []
-    doc = minidom.parse(file)
-    cameras = doc.getElementsByTagName("camera")
-    for camera in cameras:
+    doc = ET.parse(file)
+    for camera in doc.getroot():
       self.total += 1
-      name = camera.getAttribute("name")
+      name = camera.attrib["name"]
       self.names.append(name)
-      pos = camera.getElementsByTagName("pos")[0].firstChild.data
-      v = np.array(self.Convert(pos))
+      v = GetPos(camera.find('pos').text)
       self.poses.append(v)
       self.posMatrices.append(GetTranslationArray(v))
-      quat = camera.getElementsByTagName("quat")[0].firstChild.data
-      q = Quaternion(self.Convert(quat))
+      q = GetQuat(camera.find("quat").text)
       self.quats.append(q)
       self.quatMatrices.append(q.transformation_matrix)
-      #print(name,pos,quat)
+      #print(name,v,q)
 
   def GetPose(self, id, pose):
-    #mFinal = self.quatMatrices[id] * self.posMatrices[id] * pose[3] * pose[2]
     qThis = pose[1] * self.quats[id]
     pThis = np.dot(pose[2],np.dot(pose[3],np.dot(self.posMatrices[id], np.array([0,0,0,1]))))[:3]
-    qThisM = qThis.transformation_matrix
     lookAt = qThis.rotate(np.array([0,0,1])) + pThis
     sky = qThis.rotate(np.array([0,1,0]))
     return (pThis, qThis, lookAt, sky)
 
   def GetName(self, id):
     return self.names[id]
-
-  def Convert(self, str):
-    str = str.split(',')
-    for i in range(0,len(str)):
-      str[i] = float(str[i])
-    return str
