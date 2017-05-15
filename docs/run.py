@@ -1,5 +1,4 @@
 import os, argparse, platform, math, time
-from pyrr import Quaternion, Matrix44, Vector3
 from Camera import Camera
 from Path import Path
 from Config import Config

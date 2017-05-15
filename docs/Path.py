@@ -39,6 +39,8 @@ class Path:
 				pos = poses[i]*(1-rate) + poses[i+1]*rate
 				quat = Quaternion.slerp(quats[i],quats[i+1],rate)
 				self.Add(pos,quat)
+		if len(steps) == 0:
+			self.Add(poses[0],quats[0])
 
 	def Add(self, pos, quat):
 		self.poses.append(pos)
