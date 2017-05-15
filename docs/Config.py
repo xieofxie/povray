@@ -3,7 +3,7 @@ import numpy as np
 from pyquaternion import Quaternion
 
 class Config:
-  def __init__(self,args):
+  def __init__(self, args):
     self.args = args
      # handle executable
     if not args.e:
@@ -28,6 +28,13 @@ class Config:
     args.i = incPath
     # output params
     self.outputParams = open(args.output + 'params.txt','w+')
+    a = (args.e,args.file,args.i)
+    #-d Turns graphic display off
+    #+A anti-aliasing setting
+    # TODO remove use_baking
+    self.cmdBase = '%s +I%s -d Declare=use_baking=2 +A0.0 %s' % a
+    if args.t != 0:
+      self.cmdBase += ' +WT%d' % args.t
 
   def GetMatrix44Declare(self, matrix, prefix):
     val = ''
@@ -45,32 +52,30 @@ class Config:
         val += ' Declare=%s%d=%f' % (prefix,i,vector[i])
     return val
 
-  def Output(self, camPose, name):
+  def Output(self, cameraPose, cameraData):
     args = self.args
     if self.currentID >= args.s:
-      location = self.GetVector3Declare(camPose[0],'val_loc')
-      look_at = self.GetVector3Declare(camPose[2],'val_look')
-      sky = self.GetVector3Declare(camPose[3],'val_sky')
-      right = ' Declare=val_right0=%f' % args.wh
-      angle = ' Declare=val_angle=%f' % args.a
-      val = location + look_at + sky + right + angle
+      location = self.GetVector3Declare(cameraPose.pos,'val_loc')
+      look_at = self.GetVector3Declare(cameraPose.lookAt,'val_look')
+      sky = self.GetVector3Declare(cameraPose.sky,'val_sky')
+      val = location + look_at + sky
       # TODO any format one like
-      output = os.path.join(args.output,'%d-%s.png' % (self.currentID,name))
-      a = (args.e,args.file,output,args.ow,args.oh,args.i,args.q,val)
-      cmd = '%s +I%s +O%s +W%d +H%d +FN16 +wt1 -d %s Declare=use_baking=2 +A0.0 Quality=%d %s' % a
+      output = os.path.join(args.output,'%d-%s.png' % (self.currentID,cameraData.name))
+      a = (self.cmdBase,output,val,cameraData.paramStr)
+      cmd = '%s +O%s %s %s' % a
       #print(cmd)
       os.system(cmd)
-    self.OutputLine(name)
-    self.OutputLine(camPose[0])
-    self.OutputLine(camPose[1])
+    self.OutputLine(cameraData.name)
+    self.OutputLine(cameraPose.pos)
+    self.OutputLine(cameraPose.quat)
     self.outputParams.flush()
 
-  def PrepareID(self,id,pathPose):
+  def PrepareID(self,id,pathData):
     self.currentID = id
     # TODO any format one like
     self.OutputLine(id)
-    self.OutputLine(pathPose[0])
-    self.OutputLine(pathPose[1])
+    self.OutputLine(pathData.pos)
+    self.OutputLine(pathData.quat)
 
   def Finish(self):
     self.outputParams.close()
