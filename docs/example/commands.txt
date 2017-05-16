@@ -1,1 +1,1 @@
-python docs/run.py docs/living_room_code/living_room.pov docs/temp/ docs/example/camera.xml docs/example/path.xml -q 0
+python docs/run.py docs/living_room_code/living_room.pov docs/temp/ docs/example/camera.xml docs/example/path.xml -q 0 -oh 64 -ow 64

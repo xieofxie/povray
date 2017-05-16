@@ -31,8 +31,7 @@ class Config:
     a = (args.e,args.file,args.i)
     #-d Turns graphic display off
     #+A anti-aliasing setting
-    # TODO remove use_baking
-    self.cmdBase = '%s +I%s -d Declare=use_baking=2 +A0.0 %s' % a
+    self.cmdBase = '%s +I%s -d +A0.0 %s' % a
     if args.t != 0:
       self.cmdBase += ' +WT%d' % args.t
 

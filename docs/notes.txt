@@ -7,16 +7,9 @@ http://www.povray.org/documentation/3.7.0/t2_2.html#t2_2
 http://news.povray.org/povray.advanced-users/thread/%3Cweb.49c79d64a563150ecb94416e0@news.povray.org%3E/
 http://news.povray.org/povray.advanced-users/thread/%3Cweb.4e122b4b325bf6c840005e750%40news.povray.org%3E/
 
-## cmds
-http://news.povray.org/povray.bugreports/thread/%3C550357e2%40news.povray.org%3E/
-In POV-Ray 3.7 and later 'hf_gray_16' has
- to be specified as an option on the command-line (e.g. '+FNg'), in an INI file
- (e.g. 'Grayscale_Output=true'), or (on some platforms) in a dialog. The
- 'hf_gray_16' setting here is ignored. See the documentation for more details.
-
-## repos
-https://github.com/UberPOV/UberPOV
-https://github.com/mmp/pbrt-v2
-
 ## contact
 http://news.povray.org/povray.unofficial.patches/thread/%3Cweb.4e230e6e98e202ddd7ae32040%40news.povray.org%3E/?mtop=368698&moff=10
+
+# Blur
+
+https://github.com/mmp/pbrt-v2

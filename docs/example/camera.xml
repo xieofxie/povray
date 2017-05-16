@@ -4,7 +4,7 @@
     <pos>0.1,0,0</pos>
     <quat>1,0,0,0</quat>
   </camera>
-  <camera type='depth' wh = "2" oh = "16">
+  <camera type='depth' ow = "128" oh = "128">
     <pos>-0.1,0,0</pos>
     <quat>1,0,0,0</quat>
   </camera>

@@ -23,9 +23,9 @@ class CameraData:
     # prepare str
     #http://vision.in.tum.de/data/datasets/rgbd-dataset/file_formats
     if self.type == 'depth':
-      self.paramStr = ' +FNg'
+      self.paramStr = ' +FNg Declare=use_depth=1'
     else:
-      self.paramStr = ' +FN'
+      self.paramStr = ' +FN Declare=use_depth=0'
     a = (self.wh,self.a,self.oh,self.ow,self.q)
     self.paramStr += ' Declare=val_right0=%f Declare=val_angle=%f +H%d +W%d Quality=%d' % a
     # data

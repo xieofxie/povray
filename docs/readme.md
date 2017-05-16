@@ -4,7 +4,7 @@
 
 1. Compile povray like [unix](../unix/README) or [windows](../windows/readme.txt)
 
-2. Download living_room_code from [VaFRIC](http://www.doc.ic.ac.uk/~ahanda/VaFRIC/living_room.html), put it into docs. use [living_room_camera.inc](living_room_code/living_room_camera.inc) in git
+2. Download living_room_code from [VaFRIC](http://www.doc.ic.ac.uk/~ahanda/VaFRIC/living_room.html), put it into docs. use files in git if modified
 
 3. pip install pyquaternion [pyquaternion](http://kieranwynn.github.io/pyquaternion/)
 
