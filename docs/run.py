@@ -5,7 +5,7 @@ from Config import Config
 
 parser = argparse.ArgumentParser(description='run many povray calls')
 parser.add_argument('file',type=argparse.FileType('r'),help='pov file')
-parser.add_argument('output',help='output prefix')
+parser.add_argument('output',help='output prefix. so not ends with / will not be treated as folder')
 parser.add_argument('camera',type=argparse.FileType('r'),help='camera xml')
 parser.add_argument('path',type=argparse.FileType('r'),help='path xml')
 parser.add_argument('-e',help='povray executable or project path')

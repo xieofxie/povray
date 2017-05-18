@@ -27,6 +27,9 @@ class Config:
       incPath += ' +L%s' % inc
     args.i = incPath
     # output params
+    outputFolder = os.path.dirname(os.path.abspath(args.output))
+    if not os.path.exists(outputFolder):
+      os.makedirs(outputFolder)
     self.outputParams = open(args.output + 'params.txt','w+')
     a = (args.e,args.file,args.i)
     #-d Turns graphic display off
@@ -59,7 +62,7 @@ class Config:
       sky = self.GetVector3Declare(cameraPose.sky,'val_sky')
       val = location + look_at + sky
       # TODO any format one like
-      output = os.path.join(args.output,'%d-%s.png' % (self.currentID,cameraData.name))
+      output = '%s%d-%s.png' % (args.output, self.currentID,cameraData.name)
       a = (self.cmdBase,output,val,cameraData.paramStr)
       cmd = '%s +O%s %s %s' % a
       #print(cmd)

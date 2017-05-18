@@ -1,0 +1,61 @@
+apply plugin: 'com.android.model.application'
+def jni_root = 'src/main/jni/'
+def povray_root = '../../../'
+def prebuilt_root = '../prebuilt/'
+model {
+    repositories {
+        libs(PrebuiltLibraries) {
+            shouldInclude{
+                headers.srcDir "${jni_root}/source"
+                headers.srcDir "${jni_root}/vfe"
+                headers.srcDir "${jni_root}/vfe/unix"
+                headers.srcDir "${prebuilt_root}/include/png"
+                headers.srcDir "${prebuilt_root}/include/boost"
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("${povray_root}/source/libpovray.a")
+                }
+            }
+        }
+    }
+    android {
+        compileSdkVersion 23
+        buildToolsVersion "23.0.3"
+
+        defaultConfig {
+            applicationId "com.povray"
+            minSdkVersion.apiLevel 23
+            targetSdkVersion.apiLevel 23
+            versionCode 1
+            versionName "1.0"
+        }
+        ndk {
+            moduleName "povray"
+            toolchain = 'clang'
+            //stl = 'gnustl_shared'
+            stl = 'c++_shared'
+            CFlags.addAll(['-Wall'])
+            ldLibs.addAll([])
+            cppFlags.addAll(['-std=c++11'])
+        }
+        sources {
+            main {
+                jni {
+                    dependencies {
+                        library 'shouldInclude'
+                    }
+                    source{
+                        exclude "**/*.cpp"
+                        exclude "**/*.o"
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+dependencies {
+    println rootProject.getName()
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+}
+
