@@ -640,7 +640,11 @@ enum
 	kPOVAttrib_StartColumn           = kPOVAttrib_Left,
 	kPOVAttrib_EndColumn             = kPOVAttrib_Right,
 	kPOVAttrib_StartRow              = kPOVAttrib_Top,
-	kPOVAttrib_EndRow                = kPOVAttrib_Bottom
+	kPOVAttrib_EndRow                = kPOVAttrib_Bottom,
+
+	// Noise
+	kPOVAttrib_NoiseType             = 'NoiT',
+	kPOVAttrib_NoiseParameterA       = 'NoPA'
 };
 
 // Add new stats ONLY at the end!!!

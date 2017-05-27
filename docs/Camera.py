@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import numpy as np
 from pyquaternion import Quaternion
-from Math import GetTranslationArray, GetPos, GetQuat
+from Math import GetTranslationArray, GetPos, GetQuat, GetArray
 
 CameraID = 0
 
@@ -20,6 +20,14 @@ class CameraData:
     self.oh = int(camera.attrib.get('oh',args.oh))
     self.ow = int(camera.attrib.get('ow',args.ow))
     self.q = int(camera.attrib.get('q',args.q))
+    self.aa = float(camera.attrib.get('a',args.aa))
+    noise = camera.find('noise')
+    if noise != None:
+      self.nt = int(noise.attrib['type'])
+      self.np = GetArray(noise.text)
+    else:
+      self.nt = args.nt
+      self.np = args.np
     # prepare str
     #http://vision.in.tum.de/data/datasets/rgbd-dataset/file_formats
     if self.type == 'depth':
@@ -28,6 +36,12 @@ class CameraData:
       self.paramStr = ' +FN Declare=use_depth=0'
     a = (self.wh,self.a,self.oh,self.ow,self.q)
     self.paramStr += ' Declare=val_right0=%f Declare=val_angle=%f +H%d +W%d Quality=%d' % a
+    if self.aa != 3.0:
+      self.paramStr += ' +A%f' % self.aa
+    if self.nt != 0:
+      self.paramStr += ' +NT%d' % self.nt
+      for i in range(0,len(self.np)):
+        self.paramStr += ' +NP%s%f' %(chr(65+i), self.np[i])
     # data
     self.pos = GetPos(camera.find('pos').text)
     self.posMatrix = GetTranslationArray(self.pos)

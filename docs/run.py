@@ -21,6 +21,9 @@ parser.add_argument('-a',type=float,default=90,help='horizontal viewing angle, d
 parser.add_argument('-oh',type=int,default=32,help='output height, default 64')
 parser.add_argument('-ow',type=int,default=32,help='output width, default 64')
 parser.add_argument('-q',type=int,default=9,help='quality, default 9(0~11)')
+parser.add_argument('-aa',type=float,default=3,help='anti-aliasing, 0(every pixel)~3(no pixel, default)')
+parser.add_argument('-nt',type=int,default=0,help='noise type, default 0')
+parser.add_argument('-np',type=float,nargs='*',default=[],help='noise parameters')
 args = parser.parse_args()
 
 config = Config(args)

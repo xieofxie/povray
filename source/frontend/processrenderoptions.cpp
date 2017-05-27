@@ -295,7 +295,9 @@ struct ProcessOptions::Cmd_Parser_Table RenderOptions_Cmd_Table[] =
 	{ "MB",  kNoParameter,                  kNoParameter,           kPOVAttrib_Bounding },
 	{ "MI",  kPOVAttrib_MaxImageBufferMem,  kPOVMSType_Int,         kNoParameter },
 	{ "MV",  kPOVAttrib_Version,            kPOVMSType_Float,       kNoParameter },
-
+	
+	{ "NT",  kPOVAttrib_NoiseType,          kPOVMSType_Int,         kNoParameter },
+	{ "NPA", kPOVAttrib_NoiseParameterA,    kPOVMSType_Float,       kNoParameter },
 	{ "O",   kPOVAttrib_OutputFile,         kPOVMSType_UCS2String,  kNoParameter },
 
 	{ "P",   kNoParameter,                  kNoParameter,           kPOVAttrib_PauseWhenDone },

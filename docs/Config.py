@@ -33,8 +33,7 @@ class Config:
     self.outputParams = open(args.output + 'params.txt','w+')
     a = (args.e,args.file,args.i)
     #-d Turns graphic display off
-    #+A anti-aliasing setting
-    self.cmdBase = '%s +I%s -d +A0.0 %s' % a
+    self.cmdBase = '%s +I%s -d %s' % a
     if args.t != 0:
       self.cmdBase += ' +WT%d' % args.t
 

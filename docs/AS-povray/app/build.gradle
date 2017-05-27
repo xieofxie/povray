@@ -7,6 +7,7 @@ model {
         libs(PrebuiltLibraries) {
             shouldInclude{
                 headers.srcDir "${jni_root}/source"
+                headers.srcDir "${jni_root}/source/backend"
                 headers.srcDir "${jni_root}/vfe"
                 headers.srcDir "${jni_root}/vfe/unix"
                 headers.srcDir "${prebuilt_root}/include/png"

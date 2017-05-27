@@ -7,5 +7,6 @@
   <camera type='depth' ow = "128" oh = "128">
     <pos>-0.1,0,0</pos>
     <quat>1,0,0,0</quat>
+    <noise type='1'>2</noise>
   </camera>
 </cameras>
