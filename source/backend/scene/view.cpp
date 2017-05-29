@@ -697,9 +697,9 @@ void View::StartRender(POVMS_Object& renderOptions)
 	
 	noiseConfig.Clear();
 	noiseConfig.type = (NoiseConfig::Type)renderOptions.TryGetInt(kPOVAttrib_NoiseType, 0);
-	if (noiseConfig.type != NoiseConfig::NONE) {
-		//TODO read parameters here
+	if (noiseConfig.type == NoiseConfig::PERTURB_NORMAL) {
 		noiseConfig.params.push_back(renderOptions.TryGetFloat(kPOVAttrib_NoiseParameterA, 0));
+		noiseConfig.params.push_back(renderOptions.TryGetFloat(kPOVAttrib_NoiseParameterB, HUGE_VAL));
 		printf("TBR View::StartRender %s\n", noiseConfig.ToString().c_str());
 	}
 

@@ -30,6 +30,7 @@
  *******************************************************************************/
 
 #include <vector>
+#include <random>
 
 #include <boost/thread.hpp>
 
@@ -390,10 +391,11 @@ void TraceTask::SimpleSamplingM0()
 		AdditionData* additionDataP = nullptr;
 		AdditionData additionDataTemplate = View::noiseConfig.GetAdditionDataTemplate();
 		if (additionDataTemplate.HasAny()) {
-			additionDatas.clear();
-			additionDatas.reserve(rect.GetArea());
+			//additionDatas.clear();
+			//additionDatas.reserve(rect.GetArea());
 			additionDataP = &additionDataTemplate;
 		}
+		std::default_random_engine generator;
 
 		for(DBL y = DBL(rect.top); y <= DBL(rect.bottom); y++)
 		{
@@ -420,11 +422,43 @@ void TraceTask::SimpleSamplingM0()
 				trace(x, y, GetViewData()->GetWidth(), GetViewData()->GetHeight(), col, additionDataP);
 				GetViewDataPtr()->Stats()[Number_Of_Pixels]++;
 
+				if (View::noiseConfig.type == NoiseConfig::PERTURB_NORMAL) {
+					//additionDatas.push_back(additionDataP->datas);
+					const DBL depthScale = 5000.0 / 65535.0;
+					DBL depth = additionDataP->Get(AdditionData::DEPTH)[0];
+					DBL colDepth = col.red() / depthScale;
+					if (depth == HUGE_VAL) {
+						if (colDepth != 0) {
+							printf("TBR not hit with non empty color\n");
+						}
+					}
+					else {
+						if (abs(colDepth - depth) > SMALL_TOLERANCE) {
+							printf("TBR depth not equal %f %f\n", colDepth, depth);
+						}
+						DBL cosine = additionDataP->Get(AdditionData::NORMAL_COS)[0];
+						if (cosine <= 0) {
+							printf("TBR cosine %f < 0\n", cosine);
+						}
+						else {
+							DBL radian = acos(cosine);
+							std::normal_distribution<DBL> distribution(0, View::noiseConfig.params[0] * radian * depth);
+							DBL normalPerturb = distribution(generator);
+							DBL perturbDist = abs(normalPerturb * tan(radian));
+							if (perturbDist > View::noiseConfig.params[1]) {
+								col = Colour(0.0);
+							}
+							else {
+								DBL depthPerturb = normalPerturb / cosine;
+								DBL newDepth = (depth + depthPerturb) * depthScale;
+								col = Colour(newDepth);
+							}
+						}
+					}
+				}
+
 				pixels.push_back(col);
 
-				if (additionDataP != nullptr) {
-					additionDatas.push_back(additionDataP->datas);
-				}
 				Cooperate();
 			}
 		}

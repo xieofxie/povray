@@ -298,6 +298,10 @@ struct ProcessOptions::Cmd_Parser_Table RenderOptions_Cmd_Table[] =
 	
 	{ "NT",  kPOVAttrib_NoiseType,          kPOVMSType_Int,         kNoParameter },
 	{ "NPA", kPOVAttrib_NoiseParameterA,    kPOVMSType_Float,       kNoParameter },
+	{ "NPB", kPOVAttrib_NoiseParameterB,    kPOVMSType_Float,       kNoParameter },
+	{ "NPC", kPOVAttrib_NoiseParameterC,    kPOVMSType_Float,       kNoParameter },
+	{ "NPD", kPOVAttrib_NoiseParameterD,    kPOVMSType_Float,       kNoParameter },
+	{ "NPE", kPOVAttrib_NoiseParameterE,    kPOVMSType_Float,       kNoParameter },
 	{ "O",   kPOVAttrib_OutputFile,         kPOVMSType_UCS2String,  kNoParameter },
 
 	{ "P",   kNoParameter,                  kNoParameter,           kPOVAttrib_PauseWhenDone },

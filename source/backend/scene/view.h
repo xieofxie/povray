@@ -92,7 +92,9 @@ public:
 	enum Type {
 		DEPTH = 0,
 		NORMAL = 1,
-		TYPE_COUNT = 2,
+		//dot(-normal, cameraRay)
+		NORMAL_COS = 2,
+		TYPE_COUNT,
 	};
 
 	AdditionData() {
@@ -110,6 +112,7 @@ public:
 				switch ((Type)i) {
 				case DEPTH:datas[begin] = HUGE_VAL; break;
 				case NORMAL:break;
+				case NORMAL_COS:datas[begin] = -1; break;
 				}
 			}
 			counts[i] = 0;
@@ -118,10 +121,7 @@ public:
 
 	void Set(Type type) {
 		poses[type] = posEnd + 1;
-		switch (type) {
-		case DEPTH:posEnd += 1; break;
-		case NORMAL:posEnd += 3; break;
-		}
+		posEnd += typeSizes[(int)type];
 	}
 
 	bool Has(Type type) {
@@ -137,10 +137,7 @@ public:
 		if (begin == NO_POS) {
 			return;
 		}
-		switch (type) {
-		case DEPTH:memcpy(&datas[begin], data, sizeof(DBL)); break;
-		case NORMAL:memcpy(&datas[begin], data, sizeof(VECTOR)); break;
-		}
+		memcpy(&datas[begin], data, sizeof(DBL) * typeSizes[(int)type]);
 		counts[type]++;
 	}
 
@@ -165,12 +162,7 @@ public:
 			if (count == 0) {
 				continue;
 			}
-			int end = 0;
-			switch ((Type)i) {
-			case DEPTH:end = 1; break;
-			case NORMAL:end = 3; break;
-			}
-			for (int j = 0; j < end; j++) {
+			for (int j = 0; j < typeSizes[i]; j++) {
 				datas[begin + j] /= count;
 			}
 		}
@@ -186,10 +178,11 @@ private:
 		posEnd = NO_POS;
 	}
 
-	static const int NO_POS = -1;
+	const int NO_POS = -1;
 	int poses[TYPE_COUNT];
 	int counts[TYPE_COUNT];
 	int posEnd;
+	const int typeSizes[TYPE_COUNT] = {1,3,1};
 };
 
 class NoiseConfig {
@@ -220,7 +213,7 @@ public:
 		case NONE:break;
 		case PERTURB_NORMAL: {
 			data.Set(AdditionData::DEPTH);
-			data.Set(AdditionData::NORMAL);
+			data.Set(AdditionData::NORMAL_COS);
 			break;
 		}
 		}

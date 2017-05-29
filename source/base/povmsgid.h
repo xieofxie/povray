@@ -644,7 +644,11 @@ enum
 
 	// Noise
 	kPOVAttrib_NoiseType             = 'NoiT',
-	kPOVAttrib_NoiseParameterA       = 'NoPA'
+	kPOVAttrib_NoiseParameterA       = 'NoPA',
+	kPOVAttrib_NoiseParameterB       = 'NoPB',
+	kPOVAttrib_NoiseParameterC       = 'NoPC',
+	kPOVAttrib_NoiseParameterD       = 'NoPD',
+	kPOVAttrib_NoiseParameterE       = 'NoPE',
 };
 
 // Add new stats ONLY at the end!!!

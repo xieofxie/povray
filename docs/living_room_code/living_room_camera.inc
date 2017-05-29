@@ -62,7 +62,9 @@ camera {
   up <0,1,0>
   right <val_right0,0,0>
   angle val_angle
+  #if (use_depth=0)
   aperture 0.0035 blur_samples 5*10
+  #end
   /*perspective
   location sp_clo(clock)
   up <0, 1, 0> right <image_width/image_height, 0, 0>
