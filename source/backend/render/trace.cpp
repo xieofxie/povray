@@ -105,7 +105,20 @@ Trace::~Trace()
 {
 }
 
-double Trace::TraceRay(const Ray& ray, Colour& colour, COLC weight, TraceTicket& ticket, bool continuedRay, DBL maxDepth)
+static void SetAdditionData(const Intersection& isect, AdditionData* additionData) {
+	if (additionData == nullptr) {
+		return;
+	}
+	additionData->Add(AdditionData::DEPTH, &isect.Depth);
+	if (isect.haveNormal) {
+		additionData->Add(AdditionData::NORMAL, isect.INormal);
+	}
+	else {
+		//printf("TBR SetAdditionData no normal\n");
+	}
+}
+
+double Trace::TraceRay(const Ray& ray, Colour& colour, COLC weight, TraceTicket& ticket, bool continuedRay, DBL maxDepth, AdditionData* additionData)
 {
 	Intersection bestisect;
 	bool found;
@@ -145,8 +158,10 @@ double Trace::TraceRay(const Ray& ray, Colour& colour, COLC weight, TraceTicket&
 		{
 			if(found == false)
 				return HUGE_VAL;
-			else
+			else {
+				SetAdditionData(bestisect, additionData);
 				return bestisect.Depth;
+			}
 		}
 	}
 	float oldRadiosityImportanceQueried = ticket.radiosityImportanceQueried;
@@ -197,8 +212,10 @@ double Trace::TraceRay(const Ray& ray, Colour& colour, COLC weight, TraceTicket&
 
 	if(found == false)
 		return HUGE_VAL;
-	else
+	else {
+		SetAdditionData(bestisect, additionData);
 		return bestisect.Depth;
+	}
 }
 
 bool Trace::FindIntersection(Intersection& bestisect, const Ray& ray)
@@ -288,8 +305,13 @@ bool Trace::FindIntersection(Intersection& bestisect, const Ray& ray, const RayO
 		}
 		case 1:
 		{
-			if(sceneData->boundingSlabs != NULL)
-				return (Intersect_BBox_Tree(priorityQueue, sceneData->boundingSlabs, ray, &bestisect, precondition, postcondition, threadData));
+			if (sceneData->boundingSlabs != NULL) {
+				bool result = Intersect_BBox_Tree(priorityQueue, sceneData->boundingSlabs, ray, &bestisect, precondition, postcondition, threadData);
+				if (result && View::noiseConfig.type == NoiseConfig::PERTURB_NORMAL) {
+					//printf("TBR pertrub here\n");
+				}
+				return result;
+			}
 		}
 		// FALLTHROUGH
 		case 0:

@@ -377,6 +377,7 @@ void TraceTask::SimpleSamplingM0()
 {
 	POVRect rect;
 	vector<Colour> pixels;
+	vector<vector<DBL>> additionDatas;
 	unsigned int serial;
 
 	while(GetViewData()->GetNextRectangle(rect, serial) == true)
@@ -385,6 +386,14 @@ void TraceTask::SimpleSamplingM0()
 
 		pixels.clear();
 		pixels.reserve(rect.GetArea());
+		//TODO better organize
+		AdditionData* additionDataP = nullptr;
+		AdditionData additionDataTemplate = View::noiseConfig.GetAdditionDataTemplate();
+		if (additionDataTemplate.HasAny()) {
+			additionDatas.clear();
+			additionDatas.reserve(rect.GetArea());
+			additionDataP = &additionDataTemplate;
+		}
 
 		for(DBL y = DBL(rect.top); y <= DBL(rect.bottom); y++)
 		{
@@ -408,11 +417,14 @@ void TraceTask::SimpleSamplingM0()
 #endif
 				Colour col;
 
-				trace(x, y, GetViewData()->GetWidth(), GetViewData()->GetHeight(), col);
+				trace(x, y, GetViewData()->GetWidth(), GetViewData()->GetHeight(), col, additionDataP);
 				GetViewDataPtr()->Stats()[Number_Of_Pixels]++;
 
 				pixels.push_back(col);
 
+				if (additionDataP != nullptr) {
+					additionDatas.push_back(additionDataP->datas);
+				}
 				Cooperate();
 			}
 		}

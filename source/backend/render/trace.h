@@ -137,6 +137,7 @@ typedef FixedSimpleVector<LitInterval, LIT_INTERVAL_VECTOR_SIZE> LitIntervalVect
 typedef FixedSimpleVector<LightSourceIntersectionEntry, LIGHT_INTERSECTION_VECTOR_SIZE> LightSourceIntersectionVector; // TODO FIXME - cannot allow this to be fixed size [trf]
 typedef FixedSimpleVector<LightSourceEntry, LIGHTSOURCE_VECTOR_SIZE> LightSourceEntryVector; // TODO FIXME - cannot allow this to be fixed size [trf]
 
+class AdditionData;
 /**
  *  Ray tracing and shading engine.
  *  This class provides the fundamental functionality to trace rays and determine the effective colour.
@@ -216,7 +217,7 @@ class Trace
 		 *  @param[in]      maxDepth            objects at or beyond this distance won't be hit by the ray (ignored if < EPSILON)
 		 *  @return                             the distance to the nearest object hit
 		 */
-		virtual double TraceRay(const Ray& ray, Colour& colour, COLC weight, TraceTicket& ticket, bool continuedRay, DBL maxDepth = 0.0);
+		virtual double TraceRay(const Ray& ray, Colour& colour, COLC weight, TraceTicket& ticket, bool continuedRay, DBL maxDepth = 0.0, AdditionData* additionData = nullptr);
 
 		bool FindIntersection(Intersection& isect, const Ray& ray);
 		bool FindIntersection(Intersection& isect, const Ray& ray, const RayObjectCondition& precondition, const RayObjectCondition& postcondition);

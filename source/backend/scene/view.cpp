@@ -665,6 +665,8 @@ bool View::CheckCameraHollowObject(const VECTOR point)
 	return false;
 }
 
+NoiseConfig View::noiseConfig;
+
 void View::StartRender(POVMS_Object& renderOptions)
 {
 	unsigned int tracingmethod = 0;
@@ -692,6 +694,14 @@ void View::StartRender(POVMS_Object& renderOptions)
 
 	if(renderOptions.TryGetBool(kPOVAttrib_Antialias, false) == true)
 		tracingmethod = clip(renderOptions.TryGetInt(kPOVAttrib_SamplingMethod, 1), 0, 2);
+	
+	noiseConfig.Clear();
+	noiseConfig.type = (NoiseConfig::Type)renderOptions.TryGetInt(kPOVAttrib_NoiseType, 0);
+	if (noiseConfig.type != NoiseConfig::NONE) {
+		//TODO read parameters here
+		noiseConfig.params.push_back(renderOptions.TryGetFloat(kPOVAttrib_NoiseParameterA, 0));
+		printf("TBR View::StartRender %s\n", noiseConfig.ToString().c_str());
+	}
 
 	aadepth = clip((unsigned int)renderOptions.TryGetInt(kPOVAttrib_AntialiasDepth, 3), 1u, 9u);
 	aathreshold = clip(renderOptions.TryGetFloat(kPOVAttrib_AntialiasThreshold, 0.3f), 0.0f, 1.0f);

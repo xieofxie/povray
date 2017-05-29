@@ -255,10 +255,13 @@ void TracePixel::SetupCamera(const Camera& cam)
 		focalBlurData = new FocalBlurData(camera, threadData);
 }
 
-void TracePixel::operator()(DBL x, DBL y, DBL width, DBL height, Colour& colour)
+void TracePixel::operator()(DBL x, DBL y, DBL width, DBL height, Colour& colour, AdditionData* additionData)
 {
 	if(useFocalBlur == false)
 	{
+		if (additionData != nullptr) {
+			additionData->Clear(true);
+		}
 		colour.clear();
 		int numTraced = 0;
 		for (size_t rayno = 0; rayno < camera.Rays_Per_Pixel; rayno++)
@@ -270,13 +273,17 @@ void TracePixel::operator()(DBL x, DBL y, DBL width, DBL height, Colour& colour)
 				Colour col;
 
 				Trace::TraceTicket ticket(maxTraceLevel, adcBailout, sceneData->outputAlpha);
-				TraceRay(ray, col, 1.0, ticket, false, camera.Max_Ray_Distance);
+				TraceRay(ray, col, 1.0, ticket, false, camera.Max_Ray_Distance, additionData);
 				colour += col;
 				numTraced++;
 			}
 		}
-		if (numTraced)
-			colour /= (DBL) numTraced;
+		if (numTraced) {
+			colour /= (DBL)numTraced;
+			if (additionData != nullptr) {
+				additionData->Average();
+			}
+		}
 		else
 			colour.transm() = 1.0;
 	}

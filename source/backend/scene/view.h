@@ -87,6 +87,153 @@ class RTRData
 		unsigned int numPixelsCompleted;
 };
 
+class AdditionData {
+public:
+	enum Type {
+		DEPTH = 0,
+		NORMAL = 1,
+		TYPE_COUNT = 2,
+	};
+
+	AdditionData() {
+		ClearPoses();
+	}
+
+	void Clear(bool dataOnly = false) {
+		if (!dataOnly) {
+			ClearPoses();
+		}
+		datas.resize(posEnd + 1, 0);
+		for (int i = 0; i < TYPE_COUNT; i++) {
+			int begin = poses[i];
+			if (begin != -1) {
+				switch ((Type)i) {
+				case DEPTH:datas[begin] = HUGE_VAL; break;
+				case NORMAL:break;
+				}
+			}
+			counts[i] = 0;
+		}
+	}
+
+	void Set(Type type) {
+		poses[type] = posEnd + 1;
+		switch (type) {
+		case DEPTH:posEnd += 1; break;
+		case NORMAL:posEnd += 3; break;
+		}
+	}
+
+	bool Has(Type type) {
+		return poses[type] != NO_POS;
+	}
+
+	bool HasAny() {
+		return posEnd != NO_POS;
+	}
+
+	void Add(Type type, const DBL* data) {
+		int begin = poses[type];
+		if (begin == NO_POS) {
+			return;
+		}
+		switch (type) {
+		case DEPTH:memcpy(&datas[begin], data, sizeof(DBL)); break;
+		case NORMAL:memcpy(&datas[begin], data, sizeof(VECTOR)); break;
+		}
+		counts[type]++;
+	}
+
+	double* Get(Type type) {
+		int begin = poses[type];
+		if (begin == NO_POS) {
+			return nullptr;
+		}
+		if (counts[type] == 0) {
+			//return nullptr;
+		}
+		return &datas[begin];
+	}
+
+	void Average() {
+		for (int i = 0; i < (int)TYPE_COUNT; i++) {
+			int begin = poses[i];
+			if (begin == NO_POS) {
+				continue;
+			}
+			int count = counts[i];
+			if (count == 0) {
+				continue;
+			}
+			int end = 0;
+			switch ((Type)i) {
+			case DEPTH:end = 1; break;
+			case NORMAL:end = 3; break;
+			}
+			for (int j = 0; j < end; j++) {
+				datas[begin + j] /= count;
+			}
+		}
+	}
+
+	vector<DBL> datas;
+	
+private:
+	void ClearPoses() {
+		for (int i = 0; i < TYPE_COUNT; i++) {
+			poses[i] = NO_POS;
+		}
+		posEnd = NO_POS;
+	}
+
+	static const int NO_POS = -1;
+	int poses[TYPE_COUNT];
+	int counts[TYPE_COUNT];
+	int posEnd;
+};
+
+class NoiseConfig {
+public:
+	enum Type {
+		NONE = 0,
+		PERTURB_NORMAL = 1
+	};
+	Type type = NONE;
+	vector<float> params;
+
+	string ToString() const {
+		string ret = "NoiseConfig {type:";
+		switch (type) {
+			case NONE:ret += "none,params:"; break;
+			case PERTURB_NORMAL:ret += "perturb normal,params:"; break;
+		}
+		for (float f : params) {
+			ret += std::to_string(f) + " ";
+		}
+		ret += "}";
+		return ret;
+	}
+
+	AdditionData GetAdditionDataTemplate() const {
+		AdditionData data;
+		switch (type) {
+		case NONE:break;
+		case PERTURB_NORMAL: {
+			data.Set(AdditionData::DEPTH);
+			data.Set(AdditionData::NORMAL);
+			break;
+		}
+		}
+		return data;
+	}
+
+	void Clear() {
+		type = NONE;
+		params.clear();
+	}
+
+};
+
 /**
  *	ViewData class representing holding view specific data.
  *	For private use by View and Renderer classes only!
@@ -433,6 +580,9 @@ class View
 		 *  @param  rect            On return, the current statistics.
 		 */
 		void GetStatistics(POVMS_Object& renderStats);
+
+		//it may be used everywhere..
+		static NoiseConfig noiseConfig;
 	private:
 		/// running and pending render tasks for this view
 		TaskQueue renderTasks;

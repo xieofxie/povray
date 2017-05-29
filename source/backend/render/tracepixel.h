@@ -199,6 +199,8 @@ struct ContainingInteriorsPointObjectCondition : public PointObjectCondition
 	RayInteriorVector &containingInteriors;
 };
 
+class AdditionData;
+
 class TracePixel : public Trace
 {
 	public:
@@ -207,7 +209,7 @@ class TracePixel : public Trace
 		virtual ~TracePixel();
 		void SetupCamera(const Camera& cam);
 
-		void operator()(DBL x, DBL y, DBL width, DBL height, Colour& colour);
+		void operator()(DBL x, DBL y, DBL width, DBL height, Colour& colour, AdditionData* additionData = nullptr);
 	private:
 		// Focal blur data
 		class FocalBlurData
